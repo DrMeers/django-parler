@@ -280,7 +280,8 @@ class TranslatableModelMixin(object):
         for parler_meta, model_fields in self._parler_meta._split_fields(**fields):
             translation = self._get_translated_model(language_code=language_code, auto_create=True, meta=parler_meta)
             for field, value in six.iteritems(model_fields):
-                setattr(translation, field, value)
+                model_field = parler_meta.model._meta.get_field(field)
+                model_field.save_form_data(translation, value)
 
             objects.append(translation)
         return objects
