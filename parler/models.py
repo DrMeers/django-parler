@@ -311,7 +311,8 @@ class TranslatableModelMixin:
             )
             for field, value in model_fields.items():
                 try:
-                    setattr(translation, field, value)
+                    model_field = parler_meta.model._meta.get_field(field)
+                    model_field.save_form_data(translation, value)
                 except TypeError:
                     # TypeError signals a many to many field. We can't set it like the other attributes, so
                     # add to our own glued variable.
